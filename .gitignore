@@ -1,0 +1,7 @@
+*/build/!Dockerfile
+.project
+.orig
+.swp
+.idea/
+.settings/
+.vscode/
