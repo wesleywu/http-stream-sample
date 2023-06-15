@@ -27,7 +27,7 @@ func main() {
 				Value: "value" + gconv.String(i),
 			}
 			jsonBytes, _ := json.MarshalIndent(testMessage, "", "  ")
-			r.Response.Writefln("data: " + string(jsonBytes) + "\n")
+			r.Response.Writef("data: " + string(jsonBytes) + "\n\n")
 			r.Response.Flush()
 			time.Sleep(time.Millisecond * 1000)
 		}
