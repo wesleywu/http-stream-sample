@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/WesleyWu/http-stream-sample/client/streamio"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -23,7 +24,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := http.DefaultClient.Do(req)
+	// 可以设置客户端超时时间，从发起请求开始算起，过了这个超时时间，就不再试图读取Response了
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
 	}
@@ -33,7 +38,7 @@ func main() {
 	}
 }
 
-func readBodyStream(ctx context.Context, r io.Reader) error {
+func readBodyStream(ctx context.Context, r io.ReadCloser) error {
 	scanner := streamio.NewScanner(r)
 	for scanner.Scan() {
 		messageContent := trimDataMessage(scanner.Text())
@@ -44,6 +49,7 @@ func readBodyStream(ctx context.Context, r io.Reader) error {
 		}
 		g.Log().Infof(ctx, "Message decoded: SampleMessage %s", gjson.MustEncodeString(message))
 	}
+	_ = r.Close()
 	return nil
 }
 
