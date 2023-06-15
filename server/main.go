@@ -28,6 +28,8 @@ func main() {
 	//s.Run()
 }
 
+// handleStream return stream of events
+// GoFrame has bug related to context losing, see https://github.com/gogf/gf/issues/2677
 func handleStream(r *ghttp.Request) {
 	ctx := r.Context()
 
